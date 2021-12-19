@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html lang="hu">
+  <head>
+    <title>Matematika XI. (M1)</title>
+    <link rel="stylesheet" href="https://latex.vercel.app/style.css" />
+    <style>
+      :lang(hu) .theorem::before { content: counter(theorem) '. Tétel. ' !important; }
+      :lang(hu) .lemma::before { content: counter(theorem) '. Lemma. ' !important; }
+      :lang(hu) .proof::before { content: 'Bizonyítás. ' attr(title) !important; }
+      :lang(hu) .definition::before { content:  counter(definition) '. Definíció. ' !important; }
+    </style>
+    <script>
+    MathJax = {
+//      loader: {load: ['[tex]/tagformat']},
+//      loader: {load: ['[tex]/textmacros']}
+      tex: {
+//        packages: ['base'],
+//        packages: {'[+]': ['tagformat']},
+//        useLabelIds: true,
+//        processRefs: true,
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+//        displayMath: [             // start/end delimiter pairs for display math
+//          ['$$', '$$'],
+//          ['\\[', '\\]']
+
+//        ]
+    tags: 'ams'
+      }
+    };
+    </script>
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    </script>
+  </head>
+  <body>
+<h1>2.1. A sík lineáris transzformációi</h1>
+
+Bevezető szöveg...
+<p>
+    <div class="definition">
+Egy sík lineáris transzformációjának nevezzük egy olyan, a sík pontjainak a
+halmazán értelmezett $f:\mathbb{R}^2\rightarrow\mathbb{R}^2$ függvényt, amely
+egy Descartes-féle koordináta-rendszerben adott minden $A(x, y)$ pontnak
+megfelelteti az $A'(x,y)$ pontot úgy, hogy
+    \begin{eqnarray}
+      x' = a_{11} x + a_{12} y \nonumber \\
+      y' = a_{21} x + a_{22} y,
+      \label{eq:1}
+    \end{eqnarray}
+ahol $a_{11}$, $a_{12}$, $a_{21}$, $a_{22}$ valós számok.
+    </div>
+
+Itt valami $\bf{leírás}$ ... \eqref{eq:1}
+
+<div class="theorem">tétel..</div>
+    \begin{equation}
+      x' = a_{11} x + a_{12} y
+      y' = a_{21} x + a_{22} y.
+      \label{eq:2}
+    \end{equation}
+<div class="lemma">lemma..</div>
+<div class="proof">bizonyítás</div>
+
+</p>
+  </body>
+
+</html>
