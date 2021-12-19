@@ -1,0 +1,6 @@
+[submodule "CSS/latex-css"]
+	path = CSS/latex-css
+	url = https://github.com/vincentdoerig/latex-css.git
+[submodule "mathjax"]
+	path = mathjax
+	url = https://github.com/mathjax/MathJax.git

@@ -1,0 +1,50 @@
+:lang(hu) .theorem::before { content: counter(theorem) '. Tétel. ' !important; }
+:lang(hu) .lemma::before { content: counter(theorem) '. Lemma. ' !important; }
+:lang(hu) .proof::before { content: 'Bizonyítás. ' attr(title) !important; }
+:lang(hu) .definition::before { content:  counter(definition) '. Definíció. ' !important; }
+
+h1 {
+}
+h1:before {
+    counter-reset: section 0;
+    content: counter(chapter) ". ";
+}
+h1.nocount:before {
+    content: none;
+    counter-increment: none;
+}
+
+h2 {
+}
+h2:before {
+    counter-reset: slide 0;
+    counter-increment: section;
+    content: counter(chapter) "." counter(section) " ";
+}
+h2.nocount:before {
+    content: none;
+    counter-increment: none;
+}
+
+h3 {
+}
+h3:before {
+    counter-increment: slide;
+    content: counter(chapter) "." counter(section) "." counter(slide) " ";
+}
+h3.nocount:before {
+    content: none;
+    counter-increment: none;
+}
+
+li.section::before {
+    counter-increment: toc_section;
+    content: counter(chapter) "." counter(toc_section) " "
+}
+
+nav.toc::before {
+    counter-reset: toc_section 0;
+}
+nav.toc::after {
+    counter-reset: toc_section 0;
+}

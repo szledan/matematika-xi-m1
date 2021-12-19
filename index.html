@@ -3,66 +3,49 @@
 <html lang="hu">
   <head>
     <title>Matematika XI. (M1)</title>
-    <link rel="stylesheet" href="https://latex.vercel.app/style.css" />
-    <style>
-      :lang(hu) .theorem::before { content: counter(theorem) '. Tétel. ' !important; }
-      :lang(hu) .lemma::before { content: counter(theorem) '. Lemma. ' !important; }
-      :lang(hu) .proof::before { content: 'Bizonyítás. ' attr(title) !important; }
-      :lang(hu) .definition::before { content:  counter(definition) '. Definíció. ' !important; }
-    </style>
-    <script>
-    MathJax = {
-//      loader: {load: ['[tex]/tagformat']},
-//      loader: {load: ['[tex]/textmacros']}
-      tex: {
-//        packages: ['base'],
-//        packages: {'[+]': ['tagformat']},
-//        useLabelIds: true,
-//        processRefs: true,
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-//        displayMath: [             // start/end delimiter pairs for display math
-//          ['$$', '$$'],
-//          ['\\[', '\\]']
-
-//        ]
-    tags: 'ams'
-      }
-    };
-    </script>
-    <script id="MathJax-script" async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-    </script>
+    <link rel="stylesheet" href="./CSS/latex-css/style.css" />
+    <link rel="stylesheet" href="./CSS/style.css" />
+    <script id="Config-script" async src="./js/config.js"></script>
+    <script id="MathJax-script" async src="./mathjax/es5/tex-chtml.js"></script>
   </head>
   <body>
-<h1>2.1. A sík lineáris transzformációi</h1>
+    <header>
+      <h1 class="nocount" >Analízis</h1>
+      <h3 class="nocount" style="text-align: center;">Segédanyag</h3>
+      <p class="author">
+        Ledán Szilárd <br>
+        2021.
+      </p>
+    </header>
 
-Bevezető szöveg...
-<p>
-    <div class="definition">
-Egy sík lineáris transzformációjának nevezzük egy olyan, a sík pontjainak a
-halmazán értelmezett $f:\mathbb{R}^2\rightarrow\mathbb{R}^2$ függvényt, amely
-egy Descartes-féle koordináta-rendszerben adott minden $A(x, y)$ pontnak
-megfelelteti az $A'(x,y)$ pontot úgy, hogy
-    \begin{eqnarray}
-      x' = a_{11} x + a_{12} y \nonumber \\
-      y' = a_{21} x + a_{22} y,
-      \label{eq:1}
-    \end{eqnarray}
-ahol $a_{11}$, $a_{12}$, $a_{21}$, $a_{22}$ valós számok.
-    </div>
+    <div class="abstract">
+        <h2 class="nocount" >Abstract [EN]</h2>
+        <p>
+          This is a small resource for 11th graders. It seeks to facilitate understanding with many examples and interactive representations.
+          The source code can be found on GitHub at
+          <a href="https://github.com/szledan/matematika-xi-m1">https://github.com/szledan/matematika-xi-m1</a>.
+        </p>
+      </div>
 
-Itt valami $\bf{leírás}$ ... \eqref{eq:1}
-
-<div class="theorem">tétel..</div>
-    \begin{equation}
-      x' = a_{11} x + a_{12} y
-      y' = a_{21} x + a_{22} y.
-      \label{eq:2}
-    \end{equation}
-<div class="lemma">lemma..</div>
-<div class="proof">bizonyítás</div>
-
-</p>
+    <nav role="navigation" class="toc">
+      <h2 class="nocount">Tartalom</h2>
+      <ol>
+        <li><a href="pages/1_valos-szamok.html">Valós számok</a>
+          <ol>
+            <li><a href="pages/1_valos-szamok.html#Ertelmezes">A valós számok értelmezése</a></li>
+          </ol>
+        </li>
+        <li><a href="pages/2_valos-szamsorozatok.html">Valós számsorozatok</a>
+          <ol>
+            <li><a href="pages/2_valos-szamsorozatok.html#Sorozatok">Sorozatok</a></li>
+          </ol>
+        </li>
+        <li><a href="pages/3_valos-valtozos-valos-fuggvenyek-hatarerteke.html">Valós változós valós függvények határértéke</a>
+          <ol>
+            <li><a href="pages/3_valos-valtozos-valos-fuggvenyek-hatarerteke.html#Ertelmezes">A határérték értelmezése, az értelmezéssel ekvivalens állítások</a></li>
+          </ol>
+        </li>
+      </ol>
+    </nav>
   </body>
-
 </html>
