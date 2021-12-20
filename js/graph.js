@@ -1,44 +1,52 @@
-// When true, moving the mouse draws on the canvas
+//// UTILS /////////////////////////////////////////////////////////////////////
 
-//var canvases = document.getElementsByClassName("_graph");
+class Log {
+    constructor() {}
+    static i(s) { console.log("[INFO] " + s); }
+    static d(s) { console.debug("[DEBUG] " + s); }
+    static e(s) { console.error("[ERROR] " + s); }
 
-function logi(s) { console.log("[INFO] " + s); }
-function logd(s) { console.debug("[DEBUG] " + s); }
-function loge(s) { console.error("[ERROR] " + s); }
-
-class Config {
-    constructor()
-    {}
-
-    static bgcolor = 'red';
 }
 
+function setCursorByID(id, cursorStyle)
+{
+    var elem;
+    if (document.getElementById && (elem=document.getElementById(id)) ) {
+        if (elem.style) {
+            elem.style.cursor=cursorStyle;
+        }
+    }
+}
+
+//// CONFIG ////////////////////////////////////////////////////////////////////
+
+class Config {
+    constructor() {}
+
+    static bgcolor = 'white';
+}
+
+//// POINT /////////////////////////////////////////////////////////////////////
+
 class Point {
-    constructor(x, y) {
+    constructor(x, y)
+    {
         this.x = x;
         this.y = y;
     }
 
-    get length() {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
-    }
-
-    dist(p) {
-        return new Point(p.x - this.x, p.y - this.y)
-    }
-
-    add(p) {
-        return new Point(p.x + this.x, p.y + this.y)
-    }
-
-    inv(p) {
-        return new Point(-this.x, -this.y)
-    }
+    get length() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+    dist(p) { return new Point(p.x - this.x, p.y - this.y) }
+    add(p) { return new Point(p.x + this.x, p.y + this.y) }
+    inv(p) { return new Point(-this.x, -this.y) }
 }
 
+//// NODE //////////////////////////////////////////////////////////////////////
+
 class Node {
-    constructor(context, p) {
-        this.ctx = context;
+    constructor(p)
+    {
+        this.ctx = null;
         this._p = p;
         this.p = p;
         this.r = 3;
@@ -46,14 +54,9 @@ class Node {
         this.isCatched = false;
     }
 
-    setColor(color) {
-        this.color = color;
-        return this;
-    }
-    setPos(p) {
-        this.p = p;
-        return this;
-    }
+    setContext(context) { this.ctx = context; return this; }
+    setColor(color) { this.color = color; return this; }
+    setPos(p) { this.p = p; return this; }
 
     hittest(p)
     {
@@ -68,13 +71,15 @@ class Node {
         return res;
     }
 
-    move(p) {
+    move(p)
+    {
         this.eraseNode();
         this.setPos(p);
         this.drawNode();
     }
 
-    drawNode() {
+    drawNode()
+    {
         this.ctx.beginPath();
         this.ctx.strokeStyle = this.color;
         this.ctx.lineWidth = 1;
@@ -83,39 +88,40 @@ class Node {
         return this;
     }
 
-    eraseNode() {
-        this.ctx.beginPath();
-        this.ctx.strokeStyle = Config.bgcolor;
-        this.ctx.lineWidth = 3;
-        this.ctx.arc(this.p.x, this.p.y, this.r, 0, 2 * Math.PI);
-        this.ctx.stroke();
+    eraseNode()
+    {
+        let d = this.r + 2;
+        this.ctx.clearRect(this.p.x - d, this.p.y - d, 2 * d, 2 * d);
     }
 }
 
-function setCursorByID(id, cursorStyle) {
- var elem;
- if (document.getElementById &&
-    (elem=document.getElementById(id)) ) {
-  if (elem.style) elem.style.cursor=cursorStyle;
- }
-}
+//// GRAPH /////////////////////////////////////////////////////////////////////
 
 class Graph {
-    constructor(canvas) {
-        this.id = canvas.id;
-        this.ctx = canvas.getContext('2d');
+    constructor(div)
+    {
+        this.id = div.id;
+        var back_canvas = div.getElementsByClassName("_layer0")[0];
+        var front_canvas = div.getElementsByClassName("_layer1")[0];
+        this.b_ctx = back_canvas.getContext('2d');
+        this.f_ctx = front_canvas.getContext('2d');
         this.origo = new Point(0, 0);
+        this.nodes = [];
 
-        this.ctx.fillStyle = Config.bgcolor;
-        this.ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        this.nodes = [
-            new Node(this.ctx, new Point(60, 30)).setColor('black').drawNode(),
-            new Node(this.ctx, new Point(30, 30)).setColor('green').drawNode()
-        ];
+        this.f_ctx.clearRect(0, 0, front_canvas.width, front_canvas.height);
+        this.b_ctx.clearRect(0, 0, back_canvas.width, back_canvas.height);
+this.b_ctx.fillRect(20, 30, 40, 50);
 
         this.mousedown = [0, 0, 0];
-        canvas.addEventListener('mousedown', e => {
+        div.addEventListener('resize', e => {
+                                 back_canvas.width = div.innerWidth;
+                                 back_canvas.height = div.innerWidth;
+                                 front_canvas.width = div.innerHeight;
+                                 front_canvas.height = div.innerHeight;
+}, false);
+
+
+        front_canvas.addEventListener('mousedown', e => {
             let isBackGround = true;
             this.mousedown[e.button] = 1;
             let p = new Point(e.offsetX, e.offsetY);
@@ -132,7 +138,7 @@ class Graph {
             }
         });
 
-        canvas.addEventListener('mousemove', e => {
+        front_canvas.addEventListener('mousemove', e => {
             let p = new Point(e.offsetX, e.offsetY);
             for (let node of this.nodes) {
                 let test = node.isCatched ? 2 : node.hittest(p);
@@ -150,7 +156,7 @@ class Graph {
             }
         });
 
-        canvas.addEventListener('mouseup', e => {
+        front_canvas.addEventListener('mouseup', e => {
             this.mousedown[e.button] = 0;
             let isBackGround = true;
             for (let node of this.nodes) {
@@ -164,14 +170,39 @@ class Graph {
             }
         });
 
-        logd(this.id + " is ready!")
+        Log.d(this.id + " is ready!")
+    }
+
+    addNode(node)
+    {
+        node.setContext(this.f_ctx);
+        node.drawNode();
+        this.nodes.push(node);
     }
 }
 
-var canvases = document.getElementsByTagName("CANVAS");
+//// MAIN //////////////////////////////////////////////////////////////////////
+
 let graphs = [];
-for (let canvas of canvases)
+function loadGraphs()
 {
-    graphs.push(new Graph(canvas));
+    var elements = document.getElementsByClassName("_graph");
+    for (let div of elements)
+    {
+        //Log.i(canvas.getElementsByClassName("_back").length);
+        graph = new Graph(div);
+        graph.addNode(new Node(new Point(30, 30)).setColor('green'));
+        graph.addNode(new Node(new Point(60, 30)).setColor('black'));
+        graphs.push(graph);
+    }
 }
 
+loadGraphs();
+
+function graph_1()
+{
+}
+
+function graph_2()
+{
+}
