@@ -98,30 +98,22 @@ class Node {
 //// GRAPH /////////////////////////////////////////////////////////////////////
 
 class Graph {
-    constructor(div)
+    constructor(object)
     {
-        this.id = div.id;
-        var back_canvas = div.getElementsByClassName("_layer0")[0];
-        var front_canvas = div.getElementsByClassName("_layer1")[0];
-        this.b_ctx = back_canvas.getContext('2d');
-        this.f_ctx = front_canvas.getContext('2d');
+        this.id = object.id;
+        Log.i(object.id);
+        this.back_canvas = object.getElementsByClassName("_layer0")[0];
+        this.front_canvas = object.getElementsByClassName("_layer1")[0];
+        this.b_ctx = this.back_canvas.getContext('2d');
+        this.f_ctx = this.front_canvas.getContext('2d');
         this.origo = new Point(0, 0);
         this.nodes = [];
 
-        this.f_ctx.clearRect(0, 0, front_canvas.width, front_canvas.height);
-        this.b_ctx.clearRect(0, 0, back_canvas.width, back_canvas.height);
-this.b_ctx.fillRect(20, 30, 40, 50);
+        this.resize();
 
         this.mousedown = [0, 0, 0];
-        div.addEventListener('resize', e => {
-                                 back_canvas.width = div.innerWidth;
-                                 back_canvas.height = div.innerWidth;
-                                 front_canvas.width = div.innerHeight;
-                                 front_canvas.height = div.innerHeight;
-}, false);
 
-
-        front_canvas.addEventListener('mousedown', e => {
+        this.front_canvas.addEventListener('mousedown', e => {
             let isBackGround = true;
             this.mousedown[e.button] = 1;
             let p = new Point(e.offsetX, e.offsetY);
@@ -138,7 +130,7 @@ this.b_ctx.fillRect(20, 30, 40, 50);
             }
         });
 
-        front_canvas.addEventListener('mousemove', e => {
+        this.front_canvas.addEventListener('mousemove', e => {
             let p = new Point(e.offsetX, e.offsetY);
             for (let node of this.nodes) {
                 let test = node.isCatched ? 2 : node.hittest(p);
@@ -156,7 +148,7 @@ this.b_ctx.fillRect(20, 30, 40, 50);
             }
         });
 
-        front_canvas.addEventListener('mouseup', e => {
+        this.front_canvas.addEventListener('mouseup', e => {
             this.mousedown[e.button] = 0;
             let isBackGround = true;
             for (let node of this.nodes) {
@@ -173,6 +165,23 @@ this.b_ctx.fillRect(20, 30, 40, 50);
         Log.d(this.id + " is ready!")
     }
 
+    resize()
+    {
+        let obj = document.getElementById(this.id);
+        Log.i(obj.width + ", " + obj.height);
+        this.b_ctx.canvas.width = obj.clientWidth;
+        this.b_ctx.canvas.height = obj.clientHeight;
+        this.f_ctx.canvas.width = obj.clientWidth;
+        this.f_ctx.canvas.height = obj.clientHeight;
+
+        this.f_ctx.clearRect(0, 0, this.f_ctx.canvas.width, this.f_ctx.canvas.height);
+        this.b_ctx.clearRect(0, 0, this.b_ctx.canvas.width, this.b_ctx.canvas.height);
+        this.b_ctx.fillRect(20, 30, 40, 50);
+        for (let node of this.nodes) {
+            node.drawNode();
+        }
+    }
+
     addNode(node)
     {
         node.setContext(this.f_ctx);
@@ -187,10 +196,12 @@ let graphs = [];
 function loadGraphs()
 {
     var elements = document.getElementsByClassName("_graph");
-    for (let div of elements)
+    for (let object of elements)
     {
-        //Log.i(canvas.getElementsByClassName("_back").length);
-        graph = new Graph(div);
+        Log.i(object.getElementsByClassName("_layer0")[0]);
+        graph = new Graph(object);
+        object.onresize = graph.resize;
+
         graph.addNode(new Node(new Point(30, 30)).setColor('green'));
         graph.addNode(new Node(new Point(60, 30)).setColor('black'));
         graphs.push(graph);
